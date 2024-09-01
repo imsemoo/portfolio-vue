@@ -320,11 +320,11 @@ p {
   padding-top: 70px;
   color: var(--white, #fff);
   font-family: "Fira Code";
-  font-size: 32px;
+  font-size: 30px;
   font-style: normal;
   font-weight: 600;
   line-height: normal;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 }
 
 .header .header-title .header-subtitle {
