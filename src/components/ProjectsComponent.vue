@@ -50,6 +50,7 @@
               </div>
             </div>
           </div>
+          <button @click="addProject">Add Project</button>
         </div>
       </div>
     </div>
@@ -57,34 +58,15 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "ProjectsComponent",
   data() {
     return {
       categories: ["All", "Web Design", "WordPress", "UI/UX", "Apps Flutter"],
       selectedCategory: "All",
-      projects: [
-        {
-          title: "Besa",
-          description:
-            "Education site for studying abroad: It was a Figma file and I converted it to code",
-          image: require("@/assets/img/besa/home-page-besa.jpg"), // تحديث المسار هنا
-          technologies: [
-            "HTML",
-            "CSS",
-            "JavaScript",
-            "jQuery",
-            "Bootstrap",
-            "Fontawesome",
-            "Figma",
-            "Photoshop",
-          ],
-          category: "Web Design",
-          liveLink: "https://besa.intimedev.com",
-          codeLink: "https://github.com/imsemoo/besa.git",
-        },
-        // أضف المزيد من المشاريع هنا
-      ],
+      projects: [],
     };
   },
   computed: {
@@ -101,6 +83,44 @@ export default {
     filterProjects(category) {
       this.selectedCategory = category;
     },
+    async fetchProjects() {
+      try {
+        const response = await axios.get(
+          "http://localhost/portfolio-vue/api/getProjects.php"
+        );
+        this.projects = response.data.projects;
+      } catch (error) {
+        console.error("Error fetching projects:", error);
+      }
+    },
+    async addProject() {
+      const newProject = {
+        title: "New Project",
+        description: "Description here",
+        image: "/path/to/image.jpg",
+        technologies: ["HTML", "CSS"],
+        category: "Web Design",
+        liveLink: "http://example.com",
+        codeLink: "http://github.com",
+      };
+
+      try {
+        const response = await axios.post(
+          "http://localhost/portfolio-vue/api/addProject.php",
+          newProject
+        );
+        if (response.data.success) {
+          this.fetchProjects();
+        } else {
+          alert("Error adding project");
+        }
+      } catch (error) {
+        console.error("Error adding project:", error);
+      }
+    },
+  },
+  mounted() {
+    this.fetchProjects();
   },
 };
 </script>

@@ -1,43 +1,42 @@
 <template>
-  <div class="container mt-5">
-    <div class="row justify-content-center">
-      <div class="col-md-6">
-        <div class="card shadow-sm bg-dark text-light">
-          <div class="card-body">
-            <h2 class="text-center mb-4 text-light">Login</h2>
-            <form @submit.prevent="handleLogin">
-              <div class="mb-3">
-                <input
-                  type="text"
-                  v-model="username"
-                  class="form-control bg-dark text-light border-light"
-                  placeholder="Username"
-                  required
-                />
-              </div>
-              <div class="mb-3">
-                <input
-                  type="password"
-                  v-model="password"
-                  class="form-control bg-dark text-light border-light"
-                  placeholder="Password"
-                  required
-                />
-              </div>
-              <div class="d-grid">
-                <button type="submit" class="btn btn-outline-light">
-                  Login
-                </button>
-              </div>
-            </form>
-          </div>
+  <div
+    class="container d-flex justify-content-center align-items-center"
+    style="height: 100vh"
+  >
+    <div class="card p-4 bg-dark text-white" style="width: 400px; border: none">
+      <h2 class="text-center mb-4">Login</h2>
+      <form @submit.prevent="handleLogin">
+        <div class="form-group mb-3">
+          <label for="username">Username</label>
+          <input
+            type="text"
+            class="form-control bg-secondary text-white"
+            id="username"
+            v-model="username"
+            placeholder="Enter username"
+            required
+          />
         </div>
-      </div>
+        <div class="form-group mb-4">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            class="form-control bg-secondary text-white"
+            id="password"
+            v-model="password"
+            placeholder="Enter password"
+            required
+          />
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Login</button>
+      </form>
     </div>
   </div>
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "LoginView",
   data() {
@@ -49,20 +48,14 @@ export default {
   methods: {
     async handleLogin() {
       try {
-        const response = await fetch(
-          "http://localhost/portfolio-vue/api/login.php",
+        const response = await axios.post(
+          "http://localhost:8081/portfolio-vue/api/login.php", // تأكد من تحديث النطاق هنا
           {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              username: this.username,
-              password: this.password,
-            }),
+            username: this.username,
+            password: this.password,
           }
         );
-        const result = await response.json();
+        const result = response.data;
         if (result.success) {
           localStorage.setItem("authenticated", "true");
           this.$router.push("/dashboard");
@@ -78,15 +71,32 @@ export default {
 </script>
 
 <style scoped>
-/* تخصيص الأنماط لتتناسب مع الخلفية الداكنة */
+/* تحسين المظهر باستخدام Bootstrap */
 .container {
-  max-width: 400px;
+  background-color: #343a40; /* خلفية داكنة لتتناسب مع التصميم العام */
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.text-light {
-  color: #f8f9fa !important;
+.card {
+  background-color: #212529; /* لون أغمق لتباين أفضل مع النص */
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
 }
-.border-light {
-  border-color: #f8f9fa !important;
+
+.form-control {
+  background-color: #495057; /* لون خلفية الحقول */
+  border: none;
+  color: white;
+}
+
+.form-control::placeholder {
+  color: #adb5bd; /* لون النص عند التلميحات */
+}
+
+.btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
 }
 </style>

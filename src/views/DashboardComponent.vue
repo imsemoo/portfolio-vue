@@ -1,93 +1,164 @@
 <template>
-  <div class="container mt-5">
-    <h2 class="text-center mb-4 text-light">Dashboard</h2>
-    <div class="d-flex justify-content-end mb-3">
-      <button class="btn btn-outline-light" @click="handleLogout">
-        Logout
-      </button>
-    </div>
-    <form @submit.prevent="uploadProject" class="bg-dark p-4 rounded shadow-sm">
-      <div class="mb-3">
+  <div class="dashboard">
+    <h2>Dashboard</h2>
+    <button @click="handleLogout" class="logout-button">Logout</button>
+
+    <!-- Form to Add/Edit Project -->
+    <div class="form-container">
+      <h3>{{ editMode ? "Edit Project" : "Add New Project" }}</h3>
+      <form @submit.prevent="editMode ? updateProject() : addProject()">
         <input
           type="text"
-          v-model="project.name"
-          class="form-control bg-dark text-light border-light"
-          placeholder="Project Name"
+          v-model="form.title"
+          placeholder="Project Title"
           required
         />
-      </div>
-      <div class="mb-3">
-        <input
-          type="text"
-          v-model="project.description"
-          class="form-control bg-dark text-light border-light"
+        <textarea
+          v-model="form.description"
           placeholder="Project Description"
           required
-        />
-      </div>
-      <div class="mb-3">
+        ></textarea>
+        <input type="text" v-model="form.image" placeholder="Image URL" />
         <input
-          type="file"
-          @change="handleFileUpload"
-          class="form-control bg-dark text-light border-light"
+          type="text"
+          v-model="form.technologies"
+          placeholder="Technologies (comma separated)"
         />
-      </div>
-      <div class="d-grid">
-        <button type="submit" class="btn btn-outline-light">
-          Upload Project
+        <input type="text" v-model="form.category" placeholder="Category" />
+        <input type="text" v-model="form.liveLink" placeholder="Live Link" />
+        <input type="text" v-model="form.codeLink" placeholder="Code Link" />
+        <button type="submit">
+          {{ editMode ? "Update Project" : "Add Project" }}
         </button>
-      </div>
-    </form>
+      </form>
+    </div>
+
+    <!-- Display Projects -->
+    <div class="projects-list">
+      <h3>All Projects</h3>
+      <ul>
+        <li v-for="project in projects" :key="project.id">
+          <h4>{{ project.title }}</h4>
+          <p>{{ project.description }}</p>
+          <p>Technologies: {{ project.technologies.join(", ") }}</p>
+          <button @click="prepareEdit(project)">Edit</button>
+          <button @click="deleteProject(project.id)">Delete</button>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "DashboardComponent",
   data() {
     return {
-      project: {
-        name: "",
+      projects: [],
+      form: {
+        id: null,
+        title: "",
         description: "",
+        image: "",
+        technologies: "",
+        category: "",
+        liveLink: "",
+        codeLink: "",
       },
-      file: null,
+      editMode: false,
     };
   },
   methods: {
-    handleFileUpload(event) {
-      this.file = event.target.files[0];
-    },
-    async uploadProject() {
-      const formData = new FormData();
-      formData.append("name", this.project.name);
-      formData.append("description", this.project.description);
-      formData.append("file", this.file);
-
+    async fetchProjects() {
       try {
-        const response = await fetch(
-          "http://localhost/portfolio-vue/api/uploadProject.php",
-          {
-            method: "POST",
-            body: formData,
-            credentials: "include",
-          }
+        const response = await axios.get(
+          "http://localhost/portfolio-vue/api/getProjects.php"
         );
-        const result = await response.text();
-        alert(result); // ستظهر نتيجة تحميل الملف
+        this.projects = response.data.projects;
       } catch (error) {
-        console.error("Error uploading project:", error);
+        console.error("Error fetching projects:", error);
       }
+    },
+    async addProject() {
+      try {
+        const newProject = {
+          ...this.form,
+          technologies: this.form.technologies.split(","),
+        };
+        const response = await axios.post(
+          "http://localhost/portfolio-vue/api/addProject.php",
+          newProject
+        );
+        if (response.data.success) {
+          this.fetchProjects();
+          this.resetForm();
+        } else {
+          alert("Error adding project");
+        }
+      } catch (error) {
+        console.error("Error adding project:", error);
+      }
+    },
+    prepareEdit(project) {
+      this.form = { ...project, technologies: project.technologies.join(",") };
+      this.editMode = true;
+    },
+    async updateProject() {
+      try {
+        const updatedProject = {
+          ...this.form,
+          technologies: this.form.technologies.split(","),
+        };
+        const response = await axios.post(
+          "http://localhost/portfolio-vue/api/updateProject.php",
+          updatedProject
+        );
+        if (response.data.success) {
+          this.fetchProjects();
+          this.resetForm();
+          this.editMode = false;
+        } else {
+          alert("Error updating project");
+        }
+      } catch (error) {
+        console.error("Error updating project:", error);
+      }
+    },
+    async deleteProject(projectId) {
+      try {
+        const response = await axios.post(
+          "http://localhost/portfolio-vue/api/deleteProject.php",
+          { id: projectId }
+        );
+        if (response.data.success) {
+          this.fetchProjects();
+        } else {
+          alert("Error deleting project");
+        }
+      } catch (error) {
+        console.error("Error deleting project:", error);
+      }
+    },
+    resetForm() {
+      this.form = {
+        id: null,
+        title: "",
+        description: "",
+        image: "",
+        technologies: "",
+        category: "",
+        liveLink: "",
+        codeLink: "",
+      };
     },
     async handleLogout() {
       try {
-        const response = await fetch(
-          "http://localhost/portfolio-vue/api/logout.php",
-          {
-            method: "GET",
-            credentials: "include", // تأكد من إرسال ملفات تعريف الارتباط (Cookies)
-          }
+        const response = await axios.get(
+          "http://localhost/portfolio-vue/api/logout.php"
         );
-        const result = await response.json();
+        const result = response.data;
         if (result.success) {
           localStorage.removeItem("authenticated");
           this.$router.push("/login");
@@ -99,19 +170,41 @@ export default {
       }
     },
   },
+  mounted() {
+    this.fetchProjects();
+  },
 };
 </script>
 
 <style scoped>
-/* تخصيص الأنماط لتتناسب مع الخلفية الداكنة */
-.container {
-  max-width: 600px;
+.dashboard {
+  padding: 20px;
 }
 
-.text-light {
-  color: #f8f9fa !important;
+.logout-button {
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
 }
-.border-light {
-  border-color: #f8f9fa !important;
+
+.form-container {
+  margin-bottom: 20px;
+}
+
+.projects-list ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.projects-list li {
+  border: 1px solid #ddd;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+button {
+  margin-right: 10px;
 }
 </style>
