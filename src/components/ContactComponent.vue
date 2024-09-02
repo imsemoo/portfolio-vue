@@ -69,9 +69,7 @@
                   class="form-control"
                   placeholder="Message"
                   required
-                >
-Please write message</textarea
-                >
+                ></textarea>
                 <label for="message">Message:</label>
               </div>
               <button type="submit" class="btn">Send</button>
@@ -84,6 +82,8 @@ Please write message</textarea
 </template>
 
 <script>
+import emailjs from "emailjs-com";
+
 export default {
   name: "ContactComponent",
   data() {
@@ -97,23 +97,18 @@ export default {
   },
   methods: {
     submitForm() {
-      const scriptURL =
-        "https://script.google.com/macros/s/AKfycbwrt7yZ9hLL2qwL7r2JHl5Zqh2YUik8aS7Pfp5pfdsw6QQdPAXKm0RN5z64lGF-RWG3/exec"; // استخدم URL الخاص بك هنا
+      const serviceID = "service_nq68ouv"; // استبدلها بـ Service ID الخاص بك
+      const templateID = "template_8tsbzly"; // استبدلها بـ Template ID الخاص بك
+      const userID = "6VGHnR9gEoE80pyEd"; // استبدلها بـ User ID الخاص بك
 
-      fetch(scriptURL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(this.formData),
-      })
-        .then((response) => response.text())
-        .then((data) => {
-          console.log("SUCCESS!", data);
+      emailjs
+        .send(serviceID, templateID, this.formData, userID)
+        .then((response) => {
+          console.log("SUCCESS!", response.status, response.text);
           alert("Your message has been sent successfully!");
         })
         .catch((error) => {
-          console.error("Error!", error.message);
+          console.error("FAILED...", error);
           alert("Failed to send your message. Please try again.");
         });
     },
