@@ -1,0 +1,47 @@
+{
+  "projects": [
+    {
+      "title": "Besa",
+      "description": "Education site for studying abroad: It was a Figma file and I converted it to code",
+      "image": "besa/home-page-besa.png",
+      "technologies": ["HTML", "CSS", "JavaScript", "jquery", "grid-Bootstrap", "Fontawesome", "Figma", "Photoshop"],
+      "category": "Web Design",
+      "liveLink": "https://www.besaeg.com/",
+      "codeLink": "https://github.com/imsemoo/besa.git"
+    },
+    {
+      "title": "HandsOnTV",
+      "description": "Entertainment video site: It was an Adobe XD file and I converted it to code",
+      "image": "tv/HandsOnTV_Pages_2.png",
+      "technologies": ["HTML", "CSS", "JavaScript", "jquery", "grid-Bootstrap", "Fontawesome", "Adobe XD", "Photoshop"],
+      "category": "Web Design",
+      "liveLink": "https://handsontv.co.uk/"
+    },
+    {
+      "title": "visaOman",
+      "description": "Sultanate of Oman travel visa website: I designed it on the WordPress platform",
+      "image": "visaoman/1.png",
+      "technologies": ["HTML", "CSS", "JavaScript", "jquery", "WordPress"],
+      "category": "WordPress",
+      "liveLink": "https://visaoman.com/"
+    },
+    {
+      "title": "CourierNow",
+      "description": "It was an Adobe XD file and I converted it to code",
+      "image": "cn/couriernow-home_1.png",
+      "technologies": ["HTML", "CSS", "JavaScript", "jquery", "grid-Bootstrap", "Fontawesome", "Adobe XD"],
+      "category": "UI/UX",
+      "liveLink": "https://couriernow.com",
+      "codeLink": "https://github.com/imsemoo/couriernow.git"
+    },
+    {
+      "title": "Besa Mobile App",
+      "description": "A mobile application developed using Flutter for a better user experience",
+      "image": "cn/couriernow-home_1.png",
+      "technologies": ["Flutter", "Dart"],
+      "category": "Mobile App",
+      "liveLink": "#",
+      "codeLink": "#"
+    }
+  ]
+}

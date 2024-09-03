@@ -507,6 +507,7 @@ p {
   height: 100%;
   -o-object-fit: cover;
   object-fit: cover;
+  object-position: top;
 }
 
 .technologies {
@@ -653,8 +654,7 @@ p {
 .grid-skills {
   display: -ms-grid;
   display: grid;
-  -ms-grid-columns: 1fr 16px 1fr 16px 2fr;
-  grid-template-columns: 1fr 1fr 2fr;
+  grid-template-columns: .8fr 1.3fr 1.2fr;
   grid-gap: 16px;
 }
 

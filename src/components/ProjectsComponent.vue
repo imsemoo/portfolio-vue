@@ -26,7 +26,7 @@
             >
               <div class="card-img-top">
                 <img
-                  :src="project.image"
+                  :src="require(`@/assets/img/${project.image}`)"
                   loading="lazy"
                   :alt="project.title + ' Image'"
                 />
@@ -42,15 +42,16 @@
                 <h5 class="card-title">{{ project.title }}</h5>
                 <p class="card-text">{{ project.description }}</p>
                 <div class="buttons">
-                  <a :href="project.liveLink" class="btn">Live &lt;~></a>
-                  <a :href="project.codeLink" class="btn"
-                    >Code <i class="fa-brands fa-github"></i
-                  ></a>
+                  <a :href="project.liveLink" class="btn" target="_blank"
+                    >Live &lt;~></a
+                  >
+                  <a :href="project.codeLink" class="btn" target="_blank">
+                    Code <i class="fa-brands fa-github"></i>
+                  </a>
                 </div>
               </div>
             </div>
           </div>
-          <button @click="addProject">Add Project</button>
         </div>
       </div>
     </div>
@@ -64,7 +65,14 @@ export default {
   name: "ProjectsComponent",
   data() {
     return {
-      categories: ["All", "Web Design", "WordPress", "UI/UX", "Apps Flutter"],
+      categories: [
+        "All",
+        "Front-End ",
+        "Web Design",
+        "WordPress",
+        "UI/UX",
+        "Apps Flutter",
+      ],
       selectedCategory: "All",
       projects: [],
     };
@@ -85,37 +93,10 @@ export default {
     },
     async fetchProjects() {
       try {
-        const response = await axios.get(
-          "http://localhost/portfolio-vue/api/getProjects.php"
-        );
+        const response = await axios.get("/projects.json");
         this.projects = response.data.projects;
       } catch (error) {
-        console.error("Error fetching projects:", error);
-      }
-    },
-    async addProject() {
-      const newProject = {
-        title: "New Project",
-        description: "Description here",
-        image: "/path/to/image.jpg",
-        technologies: ["HTML", "CSS"],
-        category: "Web Design",
-        liveLink: "http://example.com",
-        codeLink: "http://github.com",
-      };
-
-      try {
-        const response = await axios.post(
-          "http://localhost/portfolio-vue/api/addProject.php",
-          newProject
-        );
-        if (response.data.success) {
-          this.fetchProjects();
-        } else {
-          alert("Error adding project");
-        }
-      } catch (error) {
-        console.error("Error adding project:", error);
+        console.error("Error fetching projects from JSON:", error);
       }
     },
   },

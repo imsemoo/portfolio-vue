@@ -46,27 +46,50 @@ export default {
       designImage: require("@/assets/img/background-skills-2.png"),
       skills: [
         { name: "Languages", items: ["HTML", "CSS", "JavaScript", "PHP"] },
-        { name: "Tools", items: ["Adobe XD", "Photoshop", "Figma"] },
-        { name: "Library", items: ["jQuery (a JavaScript library)"] },
-        { name: "Frameworks", items: ["Vue.js", "CakePHP"] },
-        { name: "Other", items: ["WordPress", "Fontawesome", "MySQL"] },
+        {
+          name: "Frontend Technologies",
+          items: ["Vue.js", "jQuery", "Bootstrap", "SASS"],
+        },
+        {
+          name: "WordPress",
+          items: [
+            "Theme Development",
+            "Plugin Development",
+            "Custom Post Types",
+            "WooCommerce",
+          ],
+        },
+        {
+          name: "UI/UX Design",
+          items: [
+            "User Research",
+            "Wireframing",
+            "Prototyping",
+            "User Testing",
+            "Figma",
+            "Adobe XD",
+          ],
+        },
+        {
+          name: "Design Tools",
+          items: ["Adobe Photoshop", "Adobe Illustrator", "Figma"],
+        },
+        { name: "Version Control", items: ["Git", "GitHub"] },
+        {
+          name: "Mobile App Development",
+          items: ["Flutter", "Dart", "Mobile UI Design", "State Management"],
+        },
+        {
+          name: "Other Skills",
+          items: [
+            "Responsive Design",
+            "Cross-browser Compatibility",
+            "SEO Basics",
+            "Performance Optimization",
+          ],
+        },
       ],
     };
   },
 };
 </script>
-
-<style scoped>
-/* CSS for Skills from style.css */
-.skills {
-  padding: 60px 0;
-}
-.grid-skills {
-  display: grid;
-  grid-template-columns: 1fr 1fr 2fr;
-  gap: 16px;
-}
-.box-skills {
-  border: 1px solid var(--gray, #abb2bf);
-}
-</style>
