@@ -796,7 +796,10 @@ p {
 .about-me .images {
   text-align: center;
 }
-
+.about-me .images img{
+  width: 80%;
+  margin: auto;
+}
 /* End About me */
 
 /*Start contacts */
